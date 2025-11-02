@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>投稿｜ひとり時間</title>
+<style>
+:root{--bg-gradient:linear-gradient(180deg,#f4f6f8 0%,#f4f6f8 70%,#e8ecef 80%,#c5ccd2 90%,#808080 100%);--drop:#5d6b7a;--ripple:#5d6b7a22;--opacity:.18;}
+html,body{height:100%;margin:0;background:var(--bg-gradient);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Hiragino Kaku Gothic ProN",Meiryo,"Noto Sans JP",sans-serif;color:#222}
+.rain-layer{position:fixed;inset:0;z-index:0}
+.main{position:relative;z-index:1;min-height:100%;padding:12vh 4vmin 10vmin;display:grid;place-items:center;text-align:center}
+.card{max-width:980px;width:min(94vw,980px);background:rgba(255,255,255,.45);border-radius:20px;padding:clamp(20px,4vmin,40px);border:1px solid transparent}
+h1{margin:0 0 .6em;font-size:clamp(22px,3.2vmin,32px);color:#2b333a}
+a.back{display:inline-block;margin:0 0 12px;padding:.6rem 1rem;border-radius:9999px;background:rgba(255,255,255,.18);text-decoration:none;color:#2b333a}
+.embed{margin-top:12px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.5);border-radius:16px;padding:10px}
+.embed iframe{width:min(96vw,1080px);height:900px;border:0}
+@media (max-width:600px){.embed iframe{height:820px}}
+</style>
+</head>
+<body>
+<canvas id="rainCanvas" class="rain-layer" aria-hidden="true"></canvas>
+
+<main class="main">
+  <section class="card">
+    <a class="back" href="main.html">← メインへ戻る</a>
+    <h1>あなたのひとり時間を投稿する</h1>
+    <div class="embed">
+      <iframe
+        src="https://docs.google.com/forms/d/e/1FAIpQLSc7G7paHmRJT79fj1Ayl0gf3hZrUFJ4Wi6mJEDpo5l9hvN-lQ/viewform?embedded=true"
+        loading="lazy" title="投稿フォーム"></iframe>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+  const c=document.getElementById('rainCanvas'),x=c.getContext('2d');
+  const DPR=Math.max(1,Math.min(devicePixelRatio||1,2));
+  let W,H,drops=[],ripples=[];
+  function css(n,f){const v=getComputedStyle(document.documentElement).getPropertyValue(n);const n2=parseFloat(v.trim());return Number.isFinite(n2)?n2:f}
+  function resize(){W=c.width=Math.floor(innerWidth*DPR);H=c.height=Math.floor(innerHeight*DPR);c.style.width=innerWidth+'px';c.style.height=innerHeight+'px'}
+  function step(){
+    const op=css('--opacity',.22),g=x.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,`rgba(244,246,248,${op})`);g.addColorStop(.7,`rgba(244,246,248,${op})`);
+    g.addColorStop(.8,`rgba(232,236,239,${op})`);g.addColorStop(.9,`rgba(197,204,210,${op})`);
+    g.addColorStop(1,`rgba(128,128,128,${op})`);x.fillStyle=g;x.fillRect(0,0,W,H);
+  }
+  resize(); addEventListener('resize',resize,{passive:true}); step();
+})();
+</script>
+</body>
+</html>

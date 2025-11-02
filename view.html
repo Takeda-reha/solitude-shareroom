@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>みんなのひとり時間｜静穏の雨粒</title>
+  <style>
+:root{
+  --bg-gradient: linear-gradient(180deg,#f4f6f8 0%,#f4f6f8 70%,#e8ecef 80%,#c5ccd2 90%,#808080 100%);
+}
+html,body{
+  height:100%;
+  margin:0;
+  background:var(--bg-gradient);
+  color:#222;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Hiragino Kaku Gothic ProN",Meiryo,"Noto Sans JP",sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* カード */
+#randomSolo {
+  background: rgba(255,255,255,0.65);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  padding: 28px 32px;
+  max-width: 600px;
+  width: min(90vw, 600px);
+  text-align: center;
+  transition: box-shadow .3s ease, transform .3s ease;
+}
+#randomSolo:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+}
+
+/* 見出し・テキスト */
+.label {
+  font-size: .9rem;
+  color: #5b6470;
+  margin-bottom: 6px;
+}
+#soloTitle {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #2b333a;
+  margin-bottom: 8px;
+}
+#soloOne {
+  color: #374151;
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 16px;
+  white-space: pre-wrap;
+}
+
+/* 更新ボタン */
+#refreshButton {
+  background: rgba(255,255,255,0.4);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 9999px;
+  padding: 10px 20px;
+  font-weight: 600;
+  color: #2b333a;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+}
+#refreshButton:hover {
+  background: rgba(255,255,255,0.7);
+  transform: translateY(-2px);
+}
+  </style>
+</head>
+<body>
+
+  <!-- 表示カード -->
+  <div id="randomSolo">
+    <div class="label"> 今日のひとり時間</div>
+    <div id="soloTitle">読み込み中...</div>
+    <div id="soloOne"></div>
+    <button id="refreshButton">更新</button>
+  </div>
+
+  <!-- SheetJS (XLSX) CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <script>
+  async function loadRandomSolo(){
+    const XLSX_URL = 'solitude_time.xlsx';
+    try {
+      const res = await fetch(XLSX_URL, { cache: 'no-store' });
+      if (!res.ok) throw new Error('XLSX fetch failed: ' + res.status);
+      const ab = await res.arrayBuffer();
+
+      const wb = XLSX.read(ab, { type: 'array' });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+
+      if (!rows.length) throw new Error('No rows found');
+
+      const pick = rows[Math.floor(Math.random() * rows.length)];
+      const title = pick['タイトル'] || pick['title'] || '';
+      const one   = pick['ひとこと'] || pick['一言'] || pick['comment'] || '';
+
+      // 句点または空白（半角・全角・改行）で改行
+      const formattedOne = one
+        .replace(/。/g, '。<br>')        // 「。」の後で改行
+        .replace(/[\s　]+/g, '<br>')    // スペース・全角スペースを改行に
+        .replace(/<br><br>/g, '<br>');  // 連続改行を1つに整形
+
+      document.getElementById('soloTitle').textContent = title || '（タイトル未設定）';
+      document.getElementById('soloOne').innerHTML   = formattedOne || '（ひとこと未設定）';
+    } catch (err) {
+      console.error(err);
+      document.getElementById('soloTitle').textContent = 'データを読み込めませんでした。';
+      document.getElementById('soloOne').textContent   = '';
+    }
+  }
+
+  // 初期表示
+  loadRandomSolo();
+
+  // 更新ボタンのクリックで再読み込み
+  document.getElementById('refreshButton').addEventListener('click', loadRandomSolo);
+  </script>
+</body>
+</html>
+

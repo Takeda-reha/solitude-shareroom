@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ひとり時間｜静穏の雨粒</title>
+  <style>
+:root{
+  --bg-gradient: linear-gradient(180deg,#f4f6f8 0%,#f4f6f8 70%,#e8ecef 80%,#c5ccd2 90%,#808080 100%);
+  --drop:#5d6b7a; --ripple:#5d6b7a22; --opacity:.18; --density:.75; --speed:2; --line-ratio:.55; --blur:0;
+}
+html,body{height:100%;margin:0;background:var(--bg-gradient);color:#222;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Hiragino Kaku Gothic ProN",Meiryo,"Noto Sans JP",sans-serif;}
+.rain-layer{position:fixed;inset:0;z-index:0;filter:blur(var(--blur));}
+
+/* 前景 */
+.content{
+  position: relative;
+  min-height: 100%;
+  padding: 12vh 4vmin 10vmin;
+  text-align: center;
+  z-index: 1;
+}
+
+.card{
+  max-width:980px; width:min(94vw,980px);
+  background:rgba(255,255,255,.45); border:1px solid transparent;
+  border-radius:20px; padding:clamp(20px,4vmin,40px);
+  margin: 0 auto;
+}
+p{line-height:1.8;margin:.5em 0;}
+h1{font-size:clamp(22px,3.2vmin,32px);margin:0 0 .6em;color:#2b333a}
+
+/* ボタン */
+.actions{display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin:18px 0 6px;}
+.btn{
+  display:inline-block; padding:.9rem 1.4rem; border-radius:9999px; text-decoration:none; font-weight:600; letter-spacing:.02em;
+  border:1px solid rgba(255,255,255,.35); background:rgba(255,255,255,.12); color:#2b333a;
+  transition:transform .2s ease, background .2s ease, opacity .2s ease;
+}
+.btn:hover{transform:translateY(-2px); background:rgba(255,255,255,.18);}
+.btn:focus-visible{outline:2px solid #8eaac7; outline-offset:4px;}
+
+/* 埋め込み領域 */
+.section{max-width:1080px; width:min(96vw,1080px); margin:24px auto 0; z-index:1; position:relative;}
+.section h2{font-size:clamp(18px,2.8vmin,24px); font-weight:700; margin:0 0 12px; color:#2b333a; text-align:center;}
+.embed{
+  background:rgba(255,255,255,.6); border:1px solid rgba(255,255,255,.5); border-radius:16px; padding:10px;
+  box-shadow:0 12px 24px rgba(0,0,0,.04);
+}
+.embed iframe{width:100%; height:900px; border:0;}
+.caption{font-size:.9rem; color:#5b6470; text-align:center; margin:8px 0 0}
+
+/* モバイル調整 */
+@media (max-width:600px){
+  .embed iframe{height:820px;}
+}
+
+@media (prefers-reduced-motion: reduce){ .card{transition:none;} }
+
+.link-icons {
+  display: flex;
+  justify-content: center;   /* 横方向の中央揃え */
+  align-items: center;       /* 縦位置揃え */
+  gap: 10vw;                 /* アイコン間の距離 */
+  margin-top: 4vh;           /* カードとの余白 */
+  width: 100%;
+  position: relative;        /* カードの下に自然配置 */
+  flex-wrap: wrap;
+}
+
+.link-icon {
+  width: 140px;              /* アイコンサイズ */
+  height: auto;
+  opacity: 0.9;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  cursor: pointer;
+  -webkit-user-drag: none;
+}
+
+.link-icon:hover {
+  transform: translateY(-3px) scale(1.05);
+  opacity: 1.0;
+}
+
+.link-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.link-label {
+  margin-top: 0.4rem;
+  font-size: 1rem;
+  color: #2b333a;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  user-select: none;
+}
+    
+  </style>
+</head>
+<body>
+  <!-- 背景 -->
+  <canvas id="rainCanvas" class="rain-layer" aria-hidden="true"
+          data-density="0.8" data-speed="1.0" data-line-ratio="0.55"
+          data-max-drops="240" data-dot-size="1.2" data-line-length="16"
+          data-line-thickness="1" data-ripple="true"></canvas>
+
+  <!-- ヒーロー -->
+  <main class="content">
+    <section class="card">
+      <h1>ひとり時間の共有</h1>
+      <p class="muted">ガチャを回してくれた方へ。よければ、あなたの「ひとり時間」をおすそ分けしてもらえませんか？</p>
+    </section>
+    
+<!-- カードの下に2つの画像ボタン -->
+<div class="link-icons">
+
+  <!-- Share.png → Googleフォームへ直接 -->
+  <div class="link-item">
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7G7paHmRJT79fj1Ayl0gf3hZrUFJ4Wi6mJEDpo5l9hvN-lQ/viewform?usp=dialog"
+       target="_blank" rel="noopener noreferrer"
+       aria-label="ひとり時間を投稿する">
+      <img src="Share.png" alt="ひとり時間を投稿する" class="link-icon">
+    </a>
+    <p class="link-label">シェアする</p>
+  </div>
+
+  <!-- Keep.png → 独立したkeep.htmlへ -->
+  <div class="link-item">
+    <a href="keep.html" aria-label="ひとり時間を大切にする">
+      <img src="Keep.png" alt="ひとり時間を大切にする" class="link-icon">
+    </a>
+    <p class="link-label">しまっておく</p>
+  </div>
+
+</div>
+
+
+    
+  </main>
+
+  <!-- 投稿フォーム -->
+  <section id="post" class="section">
+    <h2>あなたのひとり時間を投稿する</h2>
+    <div class="embed">
+      <iframe
+        src="https://docs.google.com/forms/d/e/1FAIpQLSc7G7paHmRJT79fj1Ayl0gf3hZrUFJ4Wi6mJEDpo5l9hvN-lQ/viewform?embedded=true"
+        loading="lazy"
+        title="ひとり時間投稿フォーム">
+      </iframe>
+    </div>
+    <p class="caption">投稿は匿名で構いません。公開前に不適切な表現がないかだけ軽く確認する場合があります。</p>
+  </section>
+
+  <!-- みんなのひとり時間（閲覧） -->
+  <section id="list" class="section">
+    <h2>みんなのひとり時間</h2>
+    <div class="embed">
+      <!-- ▼▼▼ ここをあなたの「ウェブに公開」したスプレッドシートの埋め込みURLに差し替え ▼▼▼ -->
+      <iframe
+        src="https://docs.google.com/spreadsheets/d/e/【ここに公開用ID】/pubhtml?widget=true&amp;headers=false"
+        loading="lazy"
+        title="みんなのひとり時間一覧">
+      </iframe>
+      <!-- ▲▲▲ 差し替えポイント。Googleスプレッドシート → ファイル → ウェブに公開 → 埋め込み を選ぶと出ます ▲▲▲ -->
+    </div>
+    <p class="caption">フォームの回答が自動で一覧に反映されます（反映まで少し時間がかかることがあります）。</p>
+  </section>
+
+  <script>
+  (function(){
+    const canvas=document.getElementById('rainCanvas');
+    const ctx=canvas.getContext('2d');
+    const DPR=Math.max(1,Math.min(window.devicePixelRatio||1,2));
+    const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const cfg={
+      density:+(canvas.dataset.density||.75),
+      speed:+(canvas.dataset.speed||1),
+      lineRatio:+(canvas.dataset.lineRatio||.55),
+      maxDrops:parseInt(canvas.dataset.maxDrops||220,10),
+      dotSize:+(canvas.dataset.dotSize||1.2),
+      lineLength:+(canvas.dataset.lineLength||16),
+      lineThickness:+(canvas.dataset.lineThickness||1),
+      ripple:(canvas.dataset.ripple||'true')==='true',
+    };
+    function getCSS(n,f){const v=getComputedStyle(document.documentElement).getPropertyValue(n);const x=parseFloat(v.trim());return Number.isFinite(x)?x:f;}
+    let W,H,drops=[],ripples=[];
+    function resize(){W=canvas.width=Math.floor(innerWidth*DPR);H=canvas.height=Math.floor(innerHeight*DPR);
+      canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';
+      const base=Math.floor((W*H)/(800*600));const target=Math.min(cfg.maxDrops,Math.floor(140*cfg.density*Math.max(1,base)));
+      resetPool(target);}
+    function newDrop(){const isLine=Math.random()<cfg.lineRatio;const base=isLine?230:170;const u=Math.pow(Math.random(),.6);
+      const speed=base*(0.8+u*1.4)*cfg.speed;const vy=speed/60;const ay=(isLine?18:12)/60*cfg.speed;const len=isLine?Math.max(12,speed*0.06):0;
+      return{x:Math.random()*W,y:-(len||cfg.dotSize*2)-Math.random()*80,vy,ay,len,thick:cfg.lineThickness*(0.7+Math.random()*0.6),type:isLine?'line':'dot',alpha:0.45+Math.random()*0.25};}
+    function resetPool(t){const c=drops.length;if(c<t){for(let i=c;i<t;i++)drops.push(newDrop());}else if(c>t){drops.length=t;}}
+    function addRipple(x,y){if(!cfg.ripple)return;ripples.push({x,y,r:0,alpha:.18});if(ripples.length>32)ripples.shift();}
+    function step(){
+      const opacity=getCSS('--opacity',.22);
+      const g=ctx.createLinearGradient(0,0,0,H);
+      g.addColorStop(0,`rgba(244,246,248,${opacity})`);g.addColorStop(.7,`rgba(244,246,248,${opacity})`);
+      g.addColorStop(.8,`rgba(232,236,239,${opacity})`);g.addColorStop(.9,`rgba(197,204,210,${opacity})`);
+      g.addColorStop(1,`rgba(128,128,128,${opacity})`);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+      const dropColor=getComputedStyle(document.documentElement).getPropertyValue('--drop').trim()||'#5d6b7a';
+      ctx.strokeStyle=dropColor;ctx.fillStyle=dropColor;
+      for(let i=0;i<drops.length;i++){const d=drops[i];d.vy+=d.ay||0;d.y+=d.vy*DPR;ctx.globalAlpha=d.alpha;
+        if(d.type==='line'){ctx.lineWidth=d.thick;ctx.beginPath();ctx.moveTo(d.x,d.y-d.len);ctx.lineTo(d.x,d.y);ctx.stroke();}
+        else{ctx.beginPath();ctx.arc(d.x,d.y,cfg.dotSize,0,Math.PI*2);ctx.fill();}
+        if(d.y-(d.len||0)>H){if(cfg.ripple)addRipple(d.x,H-4*DPR);drops[i]=newDrop();drops[i].x=Math.random()*W;}}
+      if(cfg.ripple&&ripples.length){for(let i=ripples.length-1;i>=0;i--){const r=ripples[i];r.r+=0.8*DPR;r.alpha*=0.985;
+        if(r.alpha<0.008){ripples.splice(i,1);continue;}ctx.beginPath();ctx.globalAlpha=r.alpha;
+        ctx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--ripple').trim()||'#5d6b7a22';
+        ctx.lineWidth=1*DPR;ctx.arc(r.x,r.y,r.r,0,Math.PI);ctx.stroke();}}
+      ctx.globalAlpha=1;
+    }
+    let rafId=null; function loop(){step();rafId=requestAnimationFrame(loop);}
+    document.addEventListener('visibilitychange',()=>{if(document.hidden){if(rafId)cancelAnimationFrame(rafId);rafId=null;}else if(!reduceMotion){rafId=requestAnimationFrame(loop);}});
+    resize(); addEventListener('resize',resize,{passive:true}); if(!reduceMotion){rafId=requestAnimationFrame(loop);}else{step();}
+  })();
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
