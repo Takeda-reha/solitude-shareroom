@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>静穏の雨粒背景（抽象｜線と点）</title>
+
+  <style>
+:root{
+  --bg-gradient: linear-gradient(180deg,#f4f6f8 0%,#f4f6f8 70%,#e8ecef 80%,#c5ccd2 90%,#808080 100%);
+  --drop:#5d6b7a; --ripple:#5d6b7a22; --opacity:.18; --density:.75; --speed:2.0; --line-ratio:.55; --blur:0.0;
+}
+html,body{
+  height:100%; margin:0; background:var(--bg-gradient); color:#222;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Hiragino Kaku Gothic ProN",Meiryo,"Noto Sans JP",sans-serif;
+}
+
+/* 背景キャンバス */
+.rain-layer{position:fixed; inset:0; z-index:0; filter:blur(var(--blur));}
+
+/* 前景テキスト */
+.content{
+  position:relative;
+  min-height:100%;
+  display:flex;
+  /* ここを追加/変更 */
+  flex-direction: column;   /* ← 子要素を縦並びにする */
+  align-items: center;      /* ← 中央寄せ */
+  justify-content: flex-start;
+  padding:12vh 4vmin 8vmin;
+  text-align:center;
+  z-index:1;
+  gap: 24px;                /* ← カードと入口の間隔（任意） */
+}
+
+.card{
+  max-width:880px; width:min(92vw,880px);
+  background:rgba(255,255,255,.45);
+  border:1px solid transparent; border-radius:20px;
+  padding:clamp(20px,4vmin,40px);
+}
+h1{font-size:clamp(22px,3.5vmin,32px); margin:0 0 8px;}
+p{line-height:1.8; margin:.5em 0;}
+.content .card{color:rgb(51 51 51);}
+.content .card a{color:#2f3a44;}
+.content .card p{margin:0 0 .5em;}
+.content .card p + p{margin-top:1.8em;}
+
+/* 入口ブロック：カードの下に通常配置 */
+.entrance-area{
+  position: static;           /* ← fixed をやめる */
+  margin-top: 28px;           /* カードとの間隔（好みで調整） */
+  width: 100%;
+  display: flex;
+  flex-direction: column;     /* 窓 → テーブル の縦並び */
+  align-items: center;        /* 中央寄せ */
+  pointer-events: none;       /* 中のリンクだけクリック可にするため */
+}
+
+/* クリックできるのは窓のみ */
+.entrance-area a{ pointer-events: auto; }
+
+/* 窓とテーブルのスタイルはそのままでOK（必要ならサイズだけ調整） */
+
+/* 窓（リンクアイコン） */
+.window-icon{
+  width:min(22vw, 160px);  /* 画面に応じて縮尺 */
+  height:auto;
+  margin-bottom:10px;      /* テーブルとの間隔 */
+  opacity:.95;
+  cursor:pointer;
+  transition:transform .25s ease, opacity .25s ease;
+  user-select:none; -webkit-user-drag:none;
+}
+/* ほんの少し上に持ち上げる（“少し上に” の演出） */
+.window-icon:hover{ transform:translateY(-10px) scale(1.04); opacity:1; }
+
+/* テーブル（装飾のみ・非クリック） */
+.table-img{
+  width:min(30vw, 300px);
+  height:auto;
+  opacity:.9;
+  user-select:none; -webkit-user-drag:none;
+}
+
+/* 動きを減らす設定 */
+@media (prefers-reduced-motion: reduce){
+  .window-icon{ transition:none; transform:none; }
+}
+  </style>
+</head>
+
+<body>
+  <!-- 背景 -->
+  <canvas
+    id="rainCanvas" class="rain-layer" aria-hidden="true"
+    data-density="0.8" data-speed="1.0" data-line-ratio="0.55"
+    data-max-drops="240" data-dot-size="1.2" data-line-length="16"
+    data-line-thickness="1" data-ripple="true"></canvas>
+
+  <!-- 前景テキスト -->
+  <main class="content">
+    <section class="card">
+      <p>有給休暇を取ったある日、<br>
+      わたしは車を走らせていた。<br>
+      雨が降るなか立ち寄った<br>
+      ケンタッキーフライドチキンで、<br>
+      チキンとポテトを買い、<br>
+      車に戻ってラジオをかけて食べた。</p>
+
+      <p>誰にも気を遣わず、<br>
+      何の義務もなく、<br>
+      ただ雨とラジオの音と<br>
+      チキンの香りに包まれた時間。<br>
+      誰かと話したわけでも、<br>
+      特別なイベントがあったわけでもない。<br>
+      それでもわたしは<br>
+      驚くほど満たされた気持ちになった。</p>
+    </section>
+      <!-- 窓（リンク）＋テーブルの演出 -->
+  <div class="entrance-area" aria-label="ひとりの部屋の入口">
+    <a href="main.html" aria-label="ひとり時間のシェア空間へ">
+      <img src="window.png" alt="窓（クリックで入室）" class="window-icon">
+    </a>
+    <img src="on_the_table.png" alt="テーブルとコーヒー" class="table-img">
+  </div>
+    
+  </main>
+
+  <script>
+  (function(){
+    const canvas=document.getElementById('rainCanvas');
+    const ctx=canvas.getContext('2d');
+    const DPR=Math.max(1,Math.min(window.devicePixelRatio||1,2));
+    const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const cfg={
+      density:+(canvas.dataset.density||.75),
+      speed:+(canvas.dataset.speed||1.0),
+      lineRatio:+(canvas.dataset.lineRatio||.55),
+      maxDrops:parseInt(canvas.dataset.maxDrops||220,10),
+      dotSize:+(canvas.dataset.dotSize||1.2),
+      lineLength:+(canvas.dataset.lineLength||16),
+      lineThickness:+(canvas.dataset.lineThickness||1),
+      ripple:(canvas.dataset.ripple||'true')==='true',
+    };
+
+    function getCSS(n,f){const v=getComputedStyle(document.documentElement).getPropertyValue(n);const x=parseFloat(v.trim());return Number.isFinite(x)?x:f;}
+
+    let W,H,drops=[],ripples=[];
+    function resize(){
+      W=canvas.width=Math.floor(innerWidth*DPR);
+      H=canvas.height=Math.floor(innerHeight*DPR);
+      canvas.style.width=innerWidth+'px';
+      canvas.style.height=innerHeight+'px';
+      const base=Math.floor((W*H)/(800*600));
+      const target=Math.min(cfg.maxDrops,Math.floor(140*cfg.density*Math.max(1,base)));
+      resetPool(target);
+    }
+
+    function newDrop(){
+      const isLine=Math.random()<cfg.lineRatio;
+      const base=isLine?230:170;
+      const u=Math.pow(Math.random(),.6);
+      const speed=base*(0.8+u*1.4)*cfg.speed;
+      const vy=speed/60;
+      const ay=(isLine?18:12)/60*cfg.speed;
+      const len=isLine?Math.max(12,speed*0.06):0;
+      return{ x:Math.random()*W, y:-(len||cfg.dotSize*2)-Math.random()*80,
+              vy, ay, len, thick:cfg.lineThickness*(0.7+Math.random()*0.6),
+              type:isLine?'line':'dot', alpha:0.45+Math.random()*0.25 };
+    }
+
+    function resetPool(t){
+      const c=drops.length;
+      if(c<t){ for(let i=c;i<t;i++) drops.push(newDrop()); }
+      else if(c>t){ drops.length=t; }
+    }
+
+    function addRipple(x,y){
+      if(!cfg.ripple) return;
+      ripples.push({x,y,r:0,alpha:.18});
+      if(ripples.length>32) ripples.shift();
+    }
+
+    function step(){
+      const opacity=getCSS('--opacity',.22);
+      const g=ctx.createLinearGradient(0,0,0,H);
+      g.addColorStop(0,`rgba(244,246,248,${opacity})`);
+      g.addColorStop(.7,`rgba(244,246,248,${opacity})`);
+      g.addColorStop(.8,`rgba(232,236,239,${opacity})`);
+      g.addColorStop(.9,`rgba(197,204,210,${opacity})`);
+      g.addColorStop(1,`rgba(128,128,128,${opacity})`);
+      ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+
+      const dropColor=getComputedStyle(document.documentElement).getPropertyValue('--drop').trim()||'#5d6b7a';
+      ctx.strokeStyle=dropColor; ctx.fillStyle=dropColor;
+
+      for(let i=0;i<drops.length;i++){
+        const d=drops[i];
+        d.vy+=d.ay||0; d.y+=d.vy*DPR;
+        ctx.globalAlpha=d.alpha;
+        if(d.type==='line'){
+          ctx.lineWidth=d.thick; ctx.beginPath();
+          ctx.moveTo(d.x,d.y-d.len); ctx.lineTo(d.x,d.y); ctx.stroke();
+        }else{
+          ctx.beginPath(); ctx.arc(d.x,d.y,cfg.dotSize,0,Math.PI*2); ctx.fill();
+        }
+        if(d.y-(d.len||0)>H){
+          if(cfg.ripple) addRipple(d.x,H-4*DPR);
+          drops[i]=newDrop(); drops[i].x=Math.random()*W;
+        }
+      }
+
+      if(cfg.ripple&&ripples.length){
+        for(let i=ripples.length-1;i>=0;i--){
+          const r=ripples[i]; r.r+=0.8*DPR; r.alpha*=0.985;
+          if(r.alpha<0.008){ ripples.splice(i,1); continue; }
+          ctx.beginPath(); ctx.globalAlpha=r.alpha;
+          ctx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--ripple').trim()||'#5d6b7a22';
+          ctx.lineWidth=1*DPR; ctx.arc(r.x,r.y,r.r,0,Math.PI); ctx.stroke();
+        }
+      }
+      ctx.globalAlpha=1;
+    }
+
+    let rafId=null;
+    function loop(){ step(); rafId=requestAnimationFrame(loop); }
+
+    document.addEventListener('visibilitychange',()=>{
+      if(document.hidden){ if(rafId) cancelAnimationFrame(rafId); rafId=null; }
+      else{ rafId=requestAnimationFrame(loop); }
+    });
+
+    resize(); addEventListener('resize',resize,{passive:true});
+    rafId=requestAnimationFrame(loop);
+  })();
+  </script>
+</body>
+</html>
+
+
+
+
