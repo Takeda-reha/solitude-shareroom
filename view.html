@@ -212,7 +212,7 @@ main {
 
     <!-- 右：シェア -->
     <div class="icon-block">
-      <div class="icon-label">ひとり時間をシェアする</div>
+      <div class="icon-label">自分のひとり時間をガチャに入れる</div>
       <div class="icon-wrapper">
         <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7G7paHmRJT79fj1Ayl0gf3hZrUFJ4Wi6mJEDpo5l9hvN-lQ/viewform?usp=dialog"
            target="_blank" rel="noopener noreferrer"
@@ -245,10 +245,11 @@ async function loadRandomSolo(){
     const title = pick['タイトル'] || pick['title'] || '';
     const one   = pick['ひとこと'] || pick['一言'] || pick['comment'] || '';
 
-    const formattedOne = one
-      .replace(/。/g, '。<br>')
-      .replace(/[\s　]+/g, '<br>')
-      .replace(/<br><br>/g, '<br>');
+   const formattedOne = one
+  .replace(/[。、]/g, match => match + '<br>')  // ← 読点「、」も含める
+  .replace(/[\s　]+/g, '<br>')
+  .replace(/<br><br>/g, '<br>');
+
 
     document.getElementById('soloTitle').textContent =
       title || '（タイトル未設定）';
@@ -268,5 +269,6 @@ document.getElementById('refreshButton')
 </script>
 </body>
 </html>
+
 
 
