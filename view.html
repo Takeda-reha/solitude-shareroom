@@ -10,7 +10,7 @@ html, body {
   margin: 0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
     "Hiragino Kaku Gothic ProN", Meiryo, "Noto Sans JP", sans-serif;
-  color: #222;
+  color: #fff;
   background: url("back.png") center/cover no-repeat fixed;
   overflow-x: hidden;
   overflow-y: auto;
@@ -37,7 +37,7 @@ main {
   z-index: 1;
 }
 
-/* ひとり時間カード */
+/* 🌧 ひとり時間カード */
 #randomSolo {
   background: rgba(255,255,255,0.65);
   border-radius: 16px;
@@ -61,7 +61,7 @@ main {
   margin-bottom: 8px;
 }
 #soloOne {
-  color: #f3f3f3;
+  color: #fff;
   font-size: 1rem;
   line-height: 1.7;
   white-space: pre-wrap;
@@ -85,12 +85,12 @@ main {
   text-align: center;
 }
 .icon-label {
-  color: #444;
+  color: #fff; /* ← 白色文字に変更 */
   font-size: 1.1rem;
   font-weight: 500;
   margin-bottom: 12px;
   letter-spacing: 0.05em;
-  text-shadow: 0 1px 3px rgba(255,255,255,0.6);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
 /* 丸背景 */
@@ -156,7 +156,7 @@ main {
   <div class="button-column">
     <!-- ガチャ -->
     <div class="icon-block">
-      <div class="icon-label">ガチャをまわす</div>
+      <div class="icon-label">もう一度ガチャを回す</div>
       <div class="icon-wrapper">
         <button id="refreshButton" aria-label="更新">
           <img src="gacha.png" alt="更新">
@@ -166,7 +166,7 @@ main {
 
     <!-- シェア -->
     <div class="icon-block">
-      <div class="icon-label">ひとり時間をシェアする</div>
+      <div class="icon-label">自分のひとり時間をガチャに入れる</div>
       <div class="icon-wrapper">
         <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7G7paHmRJT79fj1Ayl0gf3hZrUFJ4Wi6mJEDpo5l9hvN-lQ/viewform?usp=dialog"
            target="_blank" rel="noopener noreferrer">
