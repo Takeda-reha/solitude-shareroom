@@ -12,14 +12,10 @@ html, body {
     "Hiragino Kaku Gothic ProN", Meiryo, "Noto Sans JP", sans-serif;
   color: #222;
   background: url("back.png") center/cover no-repeat fixed;
-  position: relative;
-  overflow-x: hidden;       /* 横スクロール禁止 */
-  overflow-y: auto;         /* 縦スクロール許可 */
-  display: block;           /* flexを解除 */
-  -webkit-overflow-scrolling: touch; /* iOSでなめらかスクロール */
+  overflow: hidden; /* 全体のスクロールを無効化 */
 }
 
-/* 背景オーバーレイ */
+/* 背景の半透明オーバーレイ */
 body::before {
   content: "";
   position: fixed;
@@ -28,71 +24,21 @@ body::before {
   z-index: 0;
 }
 
-/* コンテンツ全体（中央寄せ＋スクロール） */
+/* 🎯 中央配置コンテナ */
 main {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
-  padding: 8vh 4vmin 12vh;
-  box-sizing: border-box;
-  z-index: 1;
-  position: relative;
-}
-
-/* カード */
-#randomSolo {
-  position: relative;
-  z-index: 1;
-  background: rgba(255,255,255,0.65);
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-  padding: 28px 32px;
-  max-width: 600px;
-  width: min(90vw, 600px);
-  text-align: center;
-  transition: box-shadow .3s ease, transform .3s ease;
-  backdrop-filter: blur(6px);
-  margin-bottom: 80px;
-}
-#randomSolo:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.15);
-}
-
-/* テキスト */
-.label {
-  font-size: .9rem;
-  color: #f0f0f0;
-  margin-bottom: 6px;
-}
-#soloTitle {
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: #f8f8f8;
-  margin-bottom: 8px;
-}
-#soloOne {
-  color: #f3f3f3;
-  font-size: 1rem;
-  line-height: 1.7;
-  margin-bottom: 16px;
-  white-space: pre-wrap;
-}
-
-/* 🎰 更新＆シェアボタン配置エリア */
-.button-row {
-  position: relative;
-  display: flex;
   justify-content: center;
-  align-items: flex-start;
-  gap: 12vw; /* 丸どうしの距離 */
+  gap: 80px; /* ボタン間の距離 */
   z-index: 2;
-  margin-bottom: 60px;
 }
 
-/* 各アイコンブロック（ラベル＋丸） */
+/* 各アイコンブロック */
 .icon-block {
   display: flex;
   flex-direction: column;
@@ -100,31 +46,30 @@ main {
   text-align: center;
 }
 .icon-label {
-  color: rgba(255,255,255,0.9);
-  font-size: 1rem;
+  color: #444;
+  font-size: 1.1rem;
   font-weight: 500;
-  margin-bottom: 10px;
-  letter-spacing: 0.03em;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  margin-bottom: 12px;
+  letter-spacing: 0.05em;
+  text-shadow: 0 1px 3px rgba(255,255,255,0.6);
 }
 
-/* 丸い背景共通 */
+/* 丸い背景 */
 .icon-wrapper {
-  position: relative;
-  width: 150px;
-  height: 150px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 4px 12px rgba(255,255,255,0.25);
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
   backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .icon-wrapper:hover {
   transform: scale(1.05);
-  box-shadow: 0 6px 18px rgba(255,255,255,0.35);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
 }
 
 /* 🎰 更新ボタン */
@@ -133,11 +78,9 @@ main {
   border: none;
   padding: 0;
   cursor: pointer;
-  width: 100%;
-  height: 100%;
 }
 #refreshButton img {
-  width: 55px;
+  width: 60px;
   height: auto;
   opacity: 0.95;
   transition: transform 0.25s ease, opacity 0.25s ease;
@@ -150,7 +93,7 @@ main {
 
 /* 🔗 シェアボタン */
 .share-icon {
-  width: 70px;
+  width: 75px;
   height: auto;
   opacity: 0.95;
   transition: transform 0.3s ease, opacity 0.3s ease;
@@ -160,115 +103,32 @@ main {
   transform: scale(1.1);
   opacity: 1;
 }
-
-/* 📱 モバイル対応：極小画面のみ縦並びに変更 */
-@media (max-width: 480px) {
-  .button-row {
-    flex-direction: column; /* 480px以下の端末のみ縦並び */
-    gap: 36px; /* ボタン間隔やや広め */
-  }
-
-  .icon-wrapper {
-    width: 130px; /* 丸を少し小さくして収まりを良くする */
-    height: 130px;
-  }
-
-  .icon-label {
-    font-size: 0.9rem;
-  }
-
-  #refreshButton img {
-    width: 50px;
-  }
-
-  .share-icon {
-    width: 60px;
-  }
-}
-
   </style>
 </head>
 <body>
 
 <main>
-  <!-- 表示カード -->
-  <div id="randomSolo">
-    <div class="label"> 今日のひとり時間</div>
-    <div id="soloTitle">読み込み中...</div>
-    <div id="soloOne"></div>
+  <!-- 🎰 更新ボタン -->
+  <div class="icon-block">
+    <div class="icon-label">ガチャをまわす</div>
+    <div class="icon-wrapper">
+      <button id="refreshButton" aria-label="更新">
+        <img src="gacha.png" alt="更新">
+      </button>
+    </div>
   </div>
 
-  <!-- 🎰 更新ボタン & 🔗 シェアボタン -->
-  <div class="button-row">
-    <!-- 左：ガチャ -->
-    <div class="icon-block">
-      <div class="icon-label">もう一度ガチャをまわす</div>
-      <div class="icon-wrapper">
-        <button id="refreshButton" aria-label="更新">
-          <img src="gacha.png" alt="更新">
-        </button>
-      </div>
-    </div>
-
-    <!-- 右：シェア -->
-    <div class="icon-block">
-      <div class="icon-label">自分のひとり時間をガチャに入れる</div>
-      <div class="icon-wrapper">
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7G7paHmRJT79fj1Ayl0gf3hZrUFJ4Wi6mJEDpo5l9hvN-lQ/viewform?usp=dialog"
-           target="_blank" rel="noopener noreferrer"
-           aria-label="ひとり時間を投稿する">
-          <img src="share.png" alt="ひとり時間を投稿する" class="share-icon">
-        </a>
-      </div>
+  <!-- 🔗 シェアボタン -->
+  <div class="icon-block">
+    <div class="icon-label">ひとり時間をシェアする</div>
+    <div class="icon-wrapper">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7G7paHmRJT79fj1Ayl0gf3hZrUFJ4Wi6mJEDpo5l9hvN-lQ/viewform?usp=dialog"
+         target="_blank" rel="noopener noreferrer">
+        <img src="share.png" alt="ひとり時間を投稿する" class="share-icon">
+      </a>
     </div>
   </div>
 </main>
 
-<!-- SheetJS (XLSX) CDN -->
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
-<script>
-async function loadRandomSolo(){
-  const XLSX_URL = 'solitude_time.xlsx';
-  try {
-    const res = await fetch(XLSX_URL, { cache: 'no-store' });
-    if (!res.ok) throw new Error('XLSX fetch failed: ' + res.status);
-    const ab = await res.arrayBuffer();
-
-    const wb = XLSX.read(ab, { type: 'array' });
-    const ws = wb.Sheets[wb.SheetNames[0]];
-    const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
-
-    if (!rows.length) throw new Error('No rows found');
-
-    const pick = rows[Math.floor(Math.random() * rows.length)];
-    const title = pick['タイトル'] || pick['title'] || '';
-    const one   = pick['ひとこと'] || pick['一言'] || pick['comment'] || '';
-
-   const formattedOne = one
-  .replace(/[。、]/g, match => match + '<br>')  // ← 読点「、」も含める
-  .replace(/[\s　]+/g, '<br>')
-  .replace(/<br><br>/g, '<br>');
-
-
-    document.getElementById('soloTitle').textContent =
-      title || '（タイトル未設定）';
-    document.getElementById('soloOne').innerHTML =
-      formattedOne || '（ひとこと未設定）';
-  } catch (err) {
-    console.error(err);
-    document.getElementById('soloTitle').textContent =
-      'データを読み込めませんでした。';
-    document.getElementById('soloOne').textContent = '';
-  }
-}
-
-loadRandomSolo();
-document.getElementById('refreshButton')
-        .addEventListener('click', loadRandomSolo);
-</script>
 </body>
 </html>
-
-
-
