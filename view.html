@@ -5,28 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>みんなのひとり時間｜静穏の雨粒</title>
   <style>
-html,body{
-  height:100%;
-  margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Hiragino Kaku Gothic ProN",Meiryo,"Noto Sans JP",sans-serif;
-  color:#222;
-  display:flex;
-  flex-direction: column;
-  justify-content:center;
-  align-items:center;
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+    "Hiragino Kaku Gothic ProN", Meiryo, "Noto Sans JP", sans-serif;
+  color: #222;
   background: url("back.png") center/cover no-repeat fixed;
   position: relative;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow-x: hidden;       /* 横スクロール禁止 */
+  overflow-y: auto;         /* ✅ 縦スクロール許可 */
+  display: block;           /* ✅ flexを解除 */
 }
 
-/* 🌙 背景オーバーレイ */
+/* 背景オーバーレイ（維持） */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.25);
   z-index: 0;
+}
+
+/* コンテンツの全体配置（中央寄せ維持しつつスクロール対応） */
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* 上から順に */
+  min-height: 100vh;           /* 画面全体分確保 */
+  padding: 8vh 4vmin 12vh;     /* 上下に余白をつける */
+  box-sizing: border-box;
+  z-index: 1;
 }
 
 /* カード */
@@ -160,6 +170,7 @@ body::before {
 </head>
 <body>
 
+ <main> 
   <!-- 表示カード -->
   <div id="randomSolo">
     <div class="label"> 今日のひとり時間</div>
@@ -191,7 +202,8 @@ body::before {
       </div>
     </div>
   </div>
-
+<main>
+  
   <!-- SheetJS (XLSX) CDN -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -232,4 +244,5 @@ body::before {
   </script>
 </body>
 </html>
+
 
