@@ -101,6 +101,17 @@ p {line-height:1.8; margin:.5em 0;}
   opacity: 1;
 }
 
+/* “Enter” テキスト */
+.enter-text {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 6px;
+  letter-spacing: 0.08em;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  user-select: none;
+  font-weight: 500;
+}
+
 /* フェードイン演出 */
 .fade-in {
   opacity: 0;
@@ -206,11 +217,13 @@ p {line-height:1.8; margin:.5em 0;}
       ちょっとのぞいてみませんか？</p>
     </section>
 
-    <div class="entrance-area fade-in" aria-label="ひとりの部屋の入口">
-      <a href="entrance.html" aria-label="ひとり時間のシェア空間へ">
-        <img src="solitude_space.png" alt="窓（クリックで入室）" class="solitude_space-icon">
-      </a>
-    </div>
+<div class="entrance-area fade-in" aria-label="ひとりの部屋の入口">
+  <a href="entrance.html" aria-label="ひとり時間のシェア空間へ">
+    <img src="solitude_space.png" alt="窓（クリックで入室）" class="solitude_space-icon">
+    <div class="enter-text">Enter</div>
+  </a>
+</div>
+
   </main>
 
   <!-- 雨アニメーションスクリプト -->
@@ -285,6 +298,7 @@ p {line-height:1.8; margin:.5em 0;}
   </script>
 </body>
 </html>
+
 
 
 
