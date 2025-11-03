@@ -5,70 +5,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>みんなのひとり時間｜静穏の雨粒</title>
   <style>
-:root{
-  --bg-gradient: linear-gradient(180deg,#f4f6f8 0%,#f4f6f8 70%,#e8ecef 80%,#c5ccd2 90%,#808080 100%);
-}
 html,body{
   height:100%;
   margin:0;
-  background:var(--bg-gradient);
-  color:#222;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Hiragino Kaku Gothic ProN",Meiryo,"Noto Sans JP",sans-serif;
+  color:#222;
   display:flex;
   justify-content:center;
   align-items:center;
+  /* 🎨 固定背景 back.png */
+  background: url("back.png") center/cover no-repeat fixed;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 🌙 背景オーバーレイ（やや暗くして没入感） */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25); /* ← 透明度を上げ下げで調整（0.25〜0.4推奨） */
+  z-index: 0;
 }
 
 /* カード */
 #randomSolo {
+  position: relative;
+  z-index: 1; /* 背景オーバーレイより上に表示 */
   background: rgba(255,255,255,0.65);
   border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
   padding: 28px 32px;
   max-width: 600px;
   width: min(90vw, 600px);
   text-align: center;
   transition: box-shadow .3s ease, transform .3s ease;
+  backdrop-filter: blur(6px); /* 透明背景の下をぼかす */
 }
 #randomSolo:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.15);
 }
 
 /* 見出し・テキスト */
 .label {
   font-size: .9rem;
-  color: #5b6470;
+  color: #f0f0f0;
   margin-bottom: 6px;
 }
 #soloTitle {
   font-weight: 700;
   font-size: 1.2rem;
-  color: #2b333a;
+  color: #f8f8f8;
   margin-bottom: 8px;
 }
 #soloOne {
-  color: #374151;
+  color: #f3f3f3;
   font-size: 1rem;
   line-height: 1.7;
   margin-bottom: 16px;
   white-space: pre-wrap;
 }
 
-/* 更新ボタン */
+/* 🎰 更新ボタン（gacha.pngに変更） */
 #refreshButton {
-  background: rgba(255,255,255,0.4);
-  border: 1px solid rgba(0,0,0,0.1);
-  border-radius: 9999px;
-  padding: 10px 20px;
-  font-weight: 600;
-  color: #2b333a;
+  background: none;
+  border: none;
+  padding: 0;
   cursor: pointer;
-  transition: background 0.3s, transform 0.3s;
+  transition: transform 0.25s ease, opacity 0.25s ease;
 }
-#refreshButton:hover {
-  background: rgba(255,255,255,0.7);
-  transform: translateY(-2px);
+#refreshButton img {
+  width: 90px;
+  height: auto;
+  opacity: 0.9;
+  user-select: none;
+}
+#refreshButton:hover img {
+  transform: scale(1.06);
+  opacity: 1;
 }
   </style>
 </head>
@@ -79,7 +94,9 @@ html,body{
     <div class="label"> 今日のひとり時間</div>
     <div id="soloTitle">読み込み中...</div>
     <div id="soloOne"></div>
-    <button id="refreshButton">更新</button>
+    <button id="refreshButton">
+      <img src="gacha.png" alt="更新">
+    </button>
   </div>
 
   <!-- SheetJS (XLSX) CDN -->
@@ -105,9 +122,9 @@ html,body{
 
       // 句点または空白（半角・全角・改行）で改行
       const formattedOne = one
-        .replace(/。/g, '。<br>')        // 「。」の後で改行
-        .replace(/[\s　]+/g, '<br>')    // スペース・全角スペースを改行に
-        .replace(/<br><br>/g, '<br>');  // 連続改行を1つに整形
+        .replace(/。/g, '。<br>')
+        .replace(/[\s　]+/g, '<br>')
+        .replace(/<br><br>/g, '<br>');
 
       document.getElementById('soloTitle').textContent = title || '（タイトル未設定）';
       document.getElementById('soloOne').innerHTML   = formattedOne || '（ひとこと未設定）';
@@ -126,4 +143,3 @@ html,body{
   </script>
 </body>
 </html>
-
