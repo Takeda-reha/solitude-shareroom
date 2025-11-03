@@ -161,13 +161,31 @@ main {
   opacity: 1;
 }
 
-/* 📱 モバイル対応：縦並びに変更 */
-@media (max-width: 768px) {
+/* 📱 モバイル対応：極小画面のみ縦並びに変更 */
+@media (max-width: 480px) {
   .button-row {
-    flex-direction: column;
-    gap: 40px;
+    flex-direction: column; /* 480px以下の端末のみ縦並び */
+    gap: 36px; /* ボタン間隔やや広め */
+  }
+
+  .icon-wrapper {
+    width: 130px; /* 丸を少し小さくして収まりを良くする */
+    height: 130px;
+  }
+
+  .icon-label {
+    font-size: 0.9rem;
+  }
+
+  #refreshButton img {
+    width: 50px;
+  }
+
+  .share-icon {
+    width: 60px;
   }
 }
+
   </style>
 </head>
 <body>
@@ -250,3 +268,4 @@ document.getElementById('refreshButton')
 </script>
 </body>
 </html>
+
