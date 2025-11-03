@@ -42,7 +42,7 @@ body::before {
   text-align: center;
   transition: box-shadow .3s ease, transform .3s ease;
   backdrop-filter: blur(6px);
-  margin-bottom: 40px; /* ← シェアボタンとの間隔 */
+  margin-bottom: 80px; /* アイコンとの余白 */
 }
 #randomSolo:hover {
   transform: translateY(-2px);
@@ -69,6 +69,17 @@ body::before {
   white-space: pre-wrap;
 }
 
+/* 🎰 更新＆シェアボタン配置エリア */
+.button-row {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25vw; /* 左右の距離調整 */
+  z-index: 2;
+  margin-bottom: 60px;
+}
+
 /* 🎰 更新ボタン */
 #refreshButton {
   background: none;
@@ -78,7 +89,7 @@ body::before {
   transition: transform 0.25s ease, opacity 0.25s ease;
 }
 #refreshButton img {
-  width: 90px;
+  width: 100px;
   height: auto;
   opacity: 0.9;
   user-select: none;
@@ -88,17 +99,15 @@ body::before {
   opacity: 1;
 }
 
-/* 🔗 シェアボタン（中央配置） */
+/* 🔗 シェアボタン */
 .share-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  z-index: 1;
-  margin-bottom: 60px; /* 余白 */
 }
 .share-icon {
-  width: 120px;
+  width: 100px;
   height: auto;
   opacity: 0.9;
   transition: transform 0.3s ease, opacity 0.3s ease;
@@ -110,11 +119,11 @@ body::before {
   opacity: 1;
 }
 .share-label {
-  margin-top: 0.4rem;
-  font-size: 1rem;
+  margin-top: 0.3rem;
+  font-size: 0.95rem;
   color: #f3f3f3;
   font-weight: 500;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   user-select: none;
 }
   </style>
@@ -126,19 +135,24 @@ body::before {
     <div class="label"> 今日のひとり時間</div>
     <div id="soloTitle">読み込み中...</div>
     <div id="soloOne"></div>
-    <button id="refreshButton">
-      <img src="gacha.png" alt="更新">
-    </button>
   </div>
 
-  <!-- 🔗 シェアするボタン（カード直下中央） -->
-  <div class="share-container">
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7G7paHmRJT79fj1Ayl0gf3hZrUFJ4Wi6mJEDpo5l9hvN-lQ/viewform?usp=dialog"
-       target="_blank" rel="noopener noreferrer"
-       aria-label="ひとり時間を投稿する">
-      <img src="Share.png" alt="ひとり時間を投稿する" class="share-icon">
-    </a>
-    <p class="share-label">シェアする</p>
+  <!-- 🎰 更新ボタン & 🔗 シェアボタン -->
+  <div class="button-row">
+    <!-- 左：更新 -->
+    <button id="refreshButton" aria-label="更新">
+      <img src="gacha.png" alt="更新">
+    </button>
+
+    <!-- 右：シェア -->
+    <div class="share-container">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7G7paHmRJT79fj1Ayl0gf3hZrUFJ4Wi6mJEDpo5l9hvN-lQ/viewform?usp=dialog"
+         target="_blank" rel="noopener noreferrer"
+         aria-label="ひとり時間を投稿する">
+        <img src="share.png" alt="ひとり時間を投稿する" class="share-icon">
+      </a>
+      <p class="share-label">シェアする</p>
+    </div>
   </div>
 
   <!-- SheetJS (XLSX) CDN -->
@@ -181,4 +195,3 @@ body::before {
   </script>
 </body>
 </html>
-
