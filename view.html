@@ -11,11 +11,13 @@ html,body{
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Hiragino Kaku Gothic ProN",Meiryo,"Noto Sans JP",sans-serif;
   color:#222;
   display:flex;
+  flex-direction: column;
   justify-content:center;
   align-items:center;
   background: url("back.png") center/cover no-repeat fixed;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* 🌙 背景オーバーレイ */
@@ -40,6 +42,7 @@ body::before {
   text-align: center;
   transition: box-shadow .3s ease, transform .3s ease;
   backdrop-filter: blur(6px);
+  margin-bottom: 40px; /* ← シェアボタンとの間隔 */
 }
 #randomSolo:hover {
   transform: translateY(-2px);
@@ -85,27 +88,16 @@ body::before {
   opacity: 1;
 }
 
-/* 🔗 シェアリンク（main.html準拠） */
-.link-icons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10vw;
-  margin-top: 40px;
-  width: 100%;
-  position: relative;
-  flex-wrap: wrap;
-  z-index: 1;
-}
-
-.link-item {
+/* 🔗 シェアボタン（中央配置） */
+.share-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  z-index: 1;
+  margin-bottom: 60px; /* 余白 */
 }
-
-.link-icon {
+.share-icon {
   width: 120px;
   height: auto;
   opacity: 0.9;
@@ -113,11 +105,11 @@ body::before {
   cursor: pointer;
   -webkit-user-drag: none;
 }
-.link-icon:hover {
+.share-icon:hover {
   transform: translateY(-3px) scale(1.05);
-  opacity: 1.0;
+  opacity: 1;
 }
-.link-label {
+.share-label {
   margin-top: 0.4rem;
   font-size: 1rem;
   color: #f3f3f3;
@@ -139,16 +131,14 @@ body::before {
     </button>
   </div>
 
-  <!-- 🔗 シェアするボタン -->
-  <div class="link-icons">
-    <div class="link-item">
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7G7paHmRJT79fj1Ayl0gf3hZrUFJ4Wi6mJEDpo5l9hvN-lQ/viewform?usp=dialog"
-         target="_blank" rel="noopener noreferrer"
-         aria-label="ひとり時間を投稿する">
-        <img src="Share.png" alt="ひとり時間を投稿する" class="link-icon">
-      </a>
-      <p class="link-label">シェアする</p>
-    </div>
+  <!-- 🔗 シェアするボタン（カード直下中央） -->
+  <div class="share-container">
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7G7paHmRJT79fj1Ayl0gf3hZrUFJ4Wi6mJEDpo5l9hvN-lQ/viewform?usp=dialog"
+       target="_blank" rel="noopener noreferrer"
+       aria-label="ひとり時間を投稿する">
+      <img src="share.png" alt="ひとり時間を投稿する" class="share-icon">
+    </a>
+    <p class="share-label">シェアする</p>
   </div>
 
   <!-- SheetJS (XLSX) CDN -->
