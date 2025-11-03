@@ -83,8 +83,8 @@ body::before {
 /* --- 丸い背景共通 --- */
 .icon-wrapper {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 150px;   /* ← 丸を大きく */
+  height: 150px;  /* ← 丸を大きく */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -109,7 +109,7 @@ body::before {
   height: 100%;
 }
 #refreshButton img {
-  width: 70px;
+  width: 55px; /* ← 小さく調整 */
   height: auto;
   opacity: 0.95;
   transition: transform 0.25s ease, opacity 0.25s ease;
@@ -128,7 +128,7 @@ body::before {
   text-align: center;
 }
 .share-icon {
-  width: 70px;
+  width: 70px; /* ← シェアは少し大きめのまま */
   height: auto;
   opacity: 0.95;
   transition: transform 0.3s ease, opacity 0.3s ease;
