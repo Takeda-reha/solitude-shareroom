@@ -74,17 +74,33 @@ body::before {
   position: relative;
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 25vw;
+  align-items: flex-start;
+  gap: 15vw; /* ← 丸の距離を近づけ */
   z-index: 2;
   margin-bottom: 60px;
+}
+
+/* --- 各アイコンブロック（ラベル＋丸） --- */
+.icon-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.icon-label {
+  color: rgba(255,255,255,0.9);
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  letter-spacing: 0.03em;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 /* --- 丸い背景共通 --- */
 .icon-wrapper {
   position: relative;
-  width: 150px;   /* ← 丸を大きく */
-  height: 150px;  /* ← 丸を大きく */
+  width: 150px;
+  height: 150px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -109,7 +125,7 @@ body::before {
   height: 100%;
 }
 #refreshButton img {
-  width: 55px; /* ← 小さく調整 */
+  width: 55px;
   height: auto;
   opacity: 0.95;
   transition: transform 0.25s ease, opacity 0.25s ease;
@@ -121,14 +137,8 @@ body::before {
 }
 
 /* 🔗 シェアボタン */
-.share-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
 .share-icon {
-  width: 70px; /* ← シェアは少し大きめのまま */
+  width: 70px;
   height: auto;
   opacity: 0.95;
   transition: transform 0.3s ease, opacity 0.3s ease;
@@ -138,13 +148,13 @@ body::before {
   transform: scale(1.1);
   opacity: 1;
 }
-.share-label {
-  margin-top: 0.4rem;
-  font-size: 0.95rem;
-  color: #f3f3f3;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  user-select: none;
+
+/* 📱 モバイル対応：縦並びに変更 */
+@media (max-width: 768px) {
+  .button-row {
+    flex-direction: column;
+    gap: 40px;
+  }
 }
   </style>
 </head>
@@ -159,16 +169,20 @@ body::before {
 
   <!-- 🎰 更新ボタン & 🔗 シェアボタン -->
   <div class="button-row">
-    <!-- 左：更新 -->
-    <div class="icon-wrapper">
-      <button id="refreshButton" aria-label="更新">
-        <img src="gacha.png" alt="更新">
-      </button>
+    <!-- 左：ガチャ -->
+    <div class="icon-block">
+      <div class="icon-label">ガチャをまわす</div>
+      <div class="icon-wrapper">
+        <button id="refreshButton" aria-label="更新">
+          <img src="gacha.png" alt="更新">
+        </button>
+      </div>
     </div>
 
     <!-- 右：シェア -->
-    <div class="icon-wrapper">
-      <div class="share-container">
+    <div class="icon-block">
+      <div class="icon-label">ひとり時間をシェアする</div>
+      <div class="icon-wrapper">
         <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7G7paHmRJT79fj1Ayl0gf3hZrUFJ4Wi6mJEDpo5l9hvN-lQ/viewform?usp=dialog"
            target="_blank" rel="noopener noreferrer"
            aria-label="ひとり時間を投稿する">
