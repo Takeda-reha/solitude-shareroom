@@ -63,7 +63,7 @@ p{line-height:1.8; margin:.5em 0;}
 /* 窓とテーブルのスタイルはそのままでOK（必要ならサイズだけ調整） */
 
 /* 窓（リンクアイコン） */
-.window-icon{
+.solitude_space-icon{
   width:min(22vw, 160px);  /* 画面に応じて縮尺 */
   height:auto;
   margin-bottom:10px;      /* テーブルとの間隔 */
@@ -73,19 +73,11 @@ p{line-height:1.8; margin:.5em 0;}
   user-select:none; -webkit-user-drag:none;
 }
 /* ほんの少し上に持ち上げる（“少し上に” の演出） */
-.window-icon:hover{ transform:translateY(-10px) scale(1.04); opacity:1; }
-
-/* テーブル（装飾のみ・非クリック） */
-.table-img{
-  width:min(30vw, 300px);
-  height:auto;
-  opacity:.9;
-  user-select:none; -webkit-user-drag:none;
-}
+.solitude_space-icon:hover{ transform:translateY(-10px) scale(1.04); opacity:1; }
 
 /* 動きを減らす設定 */
 @media (prefers-reduced-motion: reduce){
-  .window-icon{ transition:none; transform:none; }
+  .solitude_space-icon{ transition:none; transform:none; }
 }
   </style>
 </head>
@@ -120,9 +112,8 @@ p{line-height:1.8; margin:.5em 0;}
       <!-- 窓（リンク）＋テーブルの演出 -->
   <div class="entrance-area" aria-label="ひとりの部屋の入口">
     <a href="main.html" aria-label="ひとり時間のシェア空間へ">
-      <img src="window.png" alt="窓（クリックで入室）" class="window-icon">
+      <img src="solitude_space.png" alt="窓（クリックで入室）" class="solitude_space-icon">
     </a>
-    <img src="on_the_table.png" alt="テーブルとコーヒー" class="table-img">
   </div>
     
   </main>
@@ -131,8 +122,8 @@ p{line-height:1.8; margin:.5em 0;}
   (function(){
     const canvas=document.getElementById('rainCanvas');
     const ctx=canvas.getContext('2d');
-    const DPR=Math.max(1,Math.min(window.devicePixelRatio||1,2));
-    const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const DPR=Math.max(1,Math.min(solitude_space.devicePixelRatio||1,2));
+    const reduceMotion=solitude_space.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const cfg={
       density:+(canvas.dataset.density||.75),
@@ -238,6 +229,7 @@ p{line-height:1.8; margin:.5em 0;}
   </script>
 </body>
 </html>
+
 
 
 
