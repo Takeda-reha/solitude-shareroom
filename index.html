@@ -11,7 +11,7 @@
   --drop:#5d6b7a; --ripple:#5d6b7a22; --opacity:.18; --density:.75; --speed:2.0; --line-ratio:.55; --blur:0.0;
 }
 html,body{
-  height:100%; margin:0; background:var(--bg-gradient); color:#222;
+  height:100%; margin:0; background:#f4f6f8; color:#222;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Hiragino Kaku Gothic ProN",Meiryo,"Noto Sans JP",sans-serif;
 }
 
@@ -122,8 +122,8 @@ p{line-height:1.8; margin:.5em 0;}
   (function(){
     const canvas=document.getElementById('rainCanvas');
     const ctx=canvas.getContext('2d');
-    const DPR=Math.max(1,Math.min(solitude_space.devicePixelRatio||1,2));
-    const reduceMotion=solitude_space.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const DPR=Math.max(1,Math.min(window.devicePixelRatio||1,2));
+    const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const cfg={
       density:+(canvas.dataset.density||.75),
@@ -175,14 +175,10 @@ p{line-height:1.8; margin:.5em 0;}
     }
 
     function step(){
-      const opacity=getCSS('--opacity',.22);
-      const g=ctx.createLinearGradient(0,0,0,H);
-      g.addColorStop(0,`rgba(244,246,248,${opacity})`);
-      g.addColorStop(.7,`rgba(244,246,248,${opacity})`);
-      g.addColorStop(.8,`rgba(232,236,239,${opacity})`);
-      g.addColorStop(.9,`rgba(197,204,210,${opacity})`);
-      g.addColorStop(1,`rgba(128,128,128,${opacity})`);
-      ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    const opacity=getCSS('--opacity',.18);
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = `rgba(244,246,248,${opacity})`; // 単色の薄い背景
+    ctx.fillRect(0,0,W,H);
 
       const dropColor=getComputedStyle(document.documentElement).getPropertyValue('--drop').trim()||'#5d6b7a';
       ctx.strokeStyle=dropColor; ctx.fillStyle=dropColor;
@@ -229,6 +225,7 @@ p{line-height:1.8; margin:.5em 0;}
   </script>
 </body>
 </html>
+
 
 
 
