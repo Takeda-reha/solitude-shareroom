@@ -14,11 +14,12 @@ html, body {
   background: url("back.png") center/cover no-repeat fixed;
   position: relative;
   overflow-x: hidden;       /* 横スクロール禁止 */
-  overflow-y: auto;         /* ✅ 縦スクロール許可 */
-  display: block;           /* ✅ flexを解除 */
+  overflow-y: auto;         /* 縦スクロール許可 */
+  display: block;           /* flexを解除 */
+  -webkit-overflow-scrolling: touch; /* iOSでなめらかスクロール */
 }
 
-/* 背景オーバーレイ（維持） */
+/* 背景オーバーレイ */
 body::before {
   content: "";
   position: fixed;
@@ -27,16 +28,17 @@ body::before {
   z-index: 0;
 }
 
-/* コンテンツの全体配置（中央寄せ維持しつつスクロール対応） */
+/* コンテンツ全体（中央寄せ＋スクロール） */
 main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* 上から順に */
-  min-height: 100vh;           /* 画面全体分確保 */
-  padding: 8vh 4vmin 12vh;     /* 上下に余白をつける */
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 8vh 4vmin 12vh;
   box-sizing: border-box;
   z-index: 1;
+  position: relative;
 }
 
 /* カード */
@@ -85,12 +87,12 @@ main {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 12vw; /* ← 丸の距離を近づけ */
+  gap: 12vw; /* 丸どうしの距離 */
   z-index: 2;
   margin-bottom: 60px;
 }
 
-/* --- 各アイコンブロック（ラベル＋丸） --- */
+/* 各アイコンブロック（ラベル＋丸） */
 .icon-block {
   display: flex;
   flex-direction: column;
@@ -106,7 +108,7 @@ main {
   text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
-/* --- 丸い背景共通 --- */
+/* 丸い背景共通 */
 .icon-wrapper {
   position: relative;
   width: 150px;
@@ -170,7 +172,7 @@ main {
 </head>
 <body>
 
- <main> 
+<main>
   <!-- 表示カード -->
   <div id="randomSolo">
     <div class="label"> 今日のひとり時間</div>
@@ -202,47 +204,49 @@ main {
       </div>
     </div>
   </div>
-<main>
-  
-  <!-- SheetJS (XLSX) CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</main>
 
-  <script>
-  async function loadRandomSolo(){
-    const XLSX_URL = 'solitude_time.xlsx';
-    try {
-      const res = await fetch(XLSX_URL, { cache: 'no-store' });
-      if (!res.ok) throw new Error('XLSX fetch failed: ' + res.status);
-      const ab = await res.arrayBuffer();
+<!-- SheetJS (XLSX) CDN -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
-      const wb = XLSX.read(ab, { type: 'array' });
-      const ws = wb.Sheets[wb.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+<script>
+async function loadRandomSolo(){
+  const XLSX_URL = 'solitude_time.xlsx';
+  try {
+    const res = await fetch(XLSX_URL, { cache: 'no-store' });
+    if (!res.ok) throw new Error('XLSX fetch failed: ' + res.status);
+    const ab = await res.arrayBuffer();
 
-      if (!rows.length) throw new Error('No rows found');
+    const wb = XLSX.read(ab, { type: 'array' });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
 
-      const pick = rows[Math.floor(Math.random() * rows.length)];
-      const title = pick['タイトル'] || pick['title'] || '';
-      const one   = pick['ひとこと'] || pick['一言'] || pick['comment'] || '';
+    if (!rows.length) throw new Error('No rows found');
 
-      const formattedOne = one
-        .replace(/。/g, '。<br>')
-        .replace(/[\s　]+/g, '<br>')
-        .replace(/<br><br>/g, '<br>');
+    const pick = rows[Math.floor(Math.random() * rows.length)];
+    const title = pick['タイトル'] || pick['title'] || '';
+    const one   = pick['ひとこと'] || pick['一言'] || pick['comment'] || '';
 
-      document.getElementById('soloTitle').textContent = title || '（タイトル未設定）';
-      document.getElementById('soloOne').innerHTML   = formattedOne || '（ひとこと未設定）';
-    } catch (err) {
-      console.error(err);
-      document.getElementById('soloTitle').textContent = 'データを読み込めませんでした。';
-      document.getElementById('soloOne').textContent   = '';
-    }
+    const formattedOne = one
+      .replace(/。/g, '。<br>')
+      .replace(/[\s　]+/g, '<br>')
+      .replace(/<br><br>/g, '<br>');
+
+    document.getElementById('soloTitle').textContent =
+      title || '（タイトル未設定）';
+    document.getElementById('soloOne').innerHTML =
+      formattedOne || '（ひとこと未設定）';
+  } catch (err) {
+    console.error(err);
+    document.getElementById('soloTitle').textContent =
+      'データを読み込めませんでした。';
+    document.getElementById('soloOne').textContent = '';
   }
+}
 
-  loadRandomSolo();
-  document.getElementById('refreshButton').addEventListener('click', loadRandomSolo);
-  </script>
+loadRandomSolo();
+document.getElementById('refreshButton')
+        .addEventListener('click', loadRandomSolo);
+</script>
 </body>
 </html>
-
-
