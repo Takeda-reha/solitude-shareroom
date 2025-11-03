@@ -145,6 +145,32 @@ p {line-height:1.8; margin:.5em 0;}
     max-width: 560px;
   }
 }
+
+ /* 🪟クリック時のフェード拡大演出 */
+.fade-out {
+  animation: zoomOut 0.8s ease forwards;
+}
+
+@keyframes zoomOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.8);
+  }
+}
+   
+/* 🌒 背景を暗くフェードアウト */
+body.fade-bg {
+  animation: fadeBg 0.9s ease forwards;
+}
+
+@keyframes fadeBg {
+  from { background-color: rgba(244,246,248,1); }
+  to { background-color: rgba(0,0,0,0.8); }
+}
   </style>
 </head>
 
@@ -196,6 +222,29 @@ p {line-height:1.8; margin:.5em 0;}
     </div>
   </main>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const entrance = document.querySelector(".solitude_space-icon");
+
+  if (entrance) {
+    entrance.addEventListener("click", (e) => {
+      e.preventDefault(); // 通常リンク停止
+      const link = entrance.parentElement.getAttribute("href");
+
+      // アニメーション適用
+      entrance.classList.add("fade-out");
+      document.body.classList.add("fade-bg"); // 背景を暗くフェード
+
+      // 同期タイミングで遷移
+      setTimeout(() => {
+        window.location.href = link;
+      }, 900); // アニメ時間に合わせて遷移
+    });
+  }
+});
+</script>
+
+  
   <!-- 雨アニメーションスクリプト -->
   <script>
   (function(){
@@ -268,3 +317,4 @@ p {line-height:1.8; margin:.5em 0;}
   </script>
 </body>
 </html>
+
