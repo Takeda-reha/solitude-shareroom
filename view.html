@@ -42,7 +42,7 @@ body::before {
   text-align: center;
   transition: box-shadow .3s ease, transform .3s ease;
   backdrop-filter: blur(6px);
-  margin-bottom: 80px; /* アイコンとの余白 */
+  margin-bottom: 80px;
 }
 #randomSolo:hover {
   transform: translateY(-2px);
@@ -75,9 +75,28 @@ body::before {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 25vw; /* 左右の距離調整 */
+  gap: 25vw;
   z-index: 2;
   margin-bottom: 60px;
+}
+
+/* --- 丸い背景共通 --- */
+.icon-wrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 12px rgba(255,255,255,0.25);
+  backdrop-filter: blur(6px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.icon-wrapper:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(255,255,255,0.35);
 }
 
 /* 🎰 更新ボタン */
@@ -86,16 +105,18 @@ body::before {
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: transform 0.25s ease, opacity 0.25s ease;
+  width: 100%;
+  height: 100%;
 }
 #refreshButton img {
-  width: 100px;
+  width: 70px;
   height: auto;
-  opacity: 0.9;
+  opacity: 0.95;
+  transition: transform 0.25s ease, opacity 0.25s ease;
   user-select: none;
 }
 #refreshButton:hover img {
-  transform: scale(1.06);
+  transform: scale(1.1);
   opacity: 1;
 }
 
@@ -107,19 +128,18 @@ body::before {
   text-align: center;
 }
 .share-icon {
-  width: 100px;
+  width: 70px;
   height: auto;
-  opacity: 0.9;
+  opacity: 0.95;
   transition: transform 0.3s ease, opacity 0.3s ease;
-  cursor: pointer;
   -webkit-user-drag: none;
 }
 .share-icon:hover {
-  transform: translateY(-3px) scale(1.05);
+  transform: scale(1.1);
   opacity: 1;
 }
 .share-label {
-  margin-top: 0.3rem;
+  margin-top: 0.4rem;
   font-size: 0.95rem;
   color: #f3f3f3;
   font-weight: 500;
@@ -140,18 +160,21 @@ body::before {
   <!-- 🎰 更新ボタン & 🔗 シェアボタン -->
   <div class="button-row">
     <!-- 左：更新 -->
-    <button id="refreshButton" aria-label="更新">
-      <img src="gacha.png" alt="更新">
-    </button>
+    <div class="icon-wrapper">
+      <button id="refreshButton" aria-label="更新">
+        <img src="gacha.png" alt="更新">
+      </button>
+    </div>
 
     <!-- 右：シェア -->
-    <div class="share-container">
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7G7paHmRJT79fj1Ayl0gf3hZrUFJ4Wi6mJEDpo5l9hvN-lQ/viewform?usp=dialog"
-         target="_blank" rel="noopener noreferrer"
-         aria-label="ひとり時間を投稿する">
-        <img src="share.png" alt="ひとり時間を投稿する" class="share-icon">
-      </a>
-      <p class="share-label">シェアする</p>
+    <div class="icon-wrapper">
+      <div class="share-container">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7G7paHmRJT79fj1Ayl0gf3hZrUFJ4Wi6mJEDpo5l9hvN-lQ/viewform?usp=dialog"
+           target="_blank" rel="noopener noreferrer"
+           aria-label="ひとり時間を投稿する">
+          <img src="share.png" alt="ひとり時間を投稿する" class="share-icon">
+        </a>
+      </div>
     </div>
   </div>
 
