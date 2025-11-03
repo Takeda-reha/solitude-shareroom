@@ -80,7 +80,7 @@ p{line-height:1.8; margin:.5em 0;}
 /* 窓とテーブルのスタイルはそのままでOK（必要ならサイズだけ調整） */
 
 /* 窓（リンクアイコン） */
-.window-icon{
+.gacha-icon{
   width:min(22vw, 160px);  /* 画面に応じて縮尺 */
   height:auto;
   margin-bottom:10px;      /* テーブルとの間隔 */
@@ -90,19 +90,13 @@ p{line-height:1.8; margin:.5em 0;}
   user-select:none; -webkit-user-drag:none;
 }
 /* ほんの少し上に持ち上げる（“少し上に” の演出） */
-.window-icon:hover{ transform:translateY(-10px) scale(1.04); opacity:1; }
+.gacha-icon:hover{ transform:translateY(-10px) scale(1.04); opacity:1; }
 
-/* テーブル（装飾のみ・非クリック） */
-.table-img{
-  width:min(30vw, 300px);
-  height:auto;
-  opacity:.9;
-  user-select:none; -webkit-user-drag:none;
-}
+
 
 /* 動きを減らす設定 */
 @media (prefers-reduced-motion: reduce){
-  .window-icon{ transition:none; transform:none; }
+  .gacha-icon{ transition:none; transform:none; }
 }
   </style>
 </head>
@@ -112,12 +106,11 @@ p{line-height:1.8; margin:.5em 0;}
   <!-- 前景テキスト -->
   <main class="content">
     <section class="card">
-      <p>有給休暇を取ったある日、<br>
-      わたしは車を走らせていた。<br>
+      <p>わたしは車を走らせていた。<br>
       雨が降るなか立ち寄った<br>
       ケンタッキーフライドチキンで、<br>
       チキンとポテトを買い、<br>
-      車に戻ってラジオをかけて食べた。</p>
+      車に戻ってラジオをかけて食べた。
 
       <p>誰にも気を遣わず、<br>
       何の義務もなく、<br>
@@ -127,19 +120,27 @@ p{line-height:1.8; margin:.5em 0;}
       特別なイベントがあったわけでもない。<br>
       それでもわたしは<br>
       驚くほど満たされた気持ちになった。</p>
+
+      <p>特に人に話すほどのことではないのだけど、<br>
+        大切にしている自分だけのひととき。<br>
+        誰しもひとつは持っているのではないでしょうか？</p>
+
+      <p>そこには、一人ひとりのこだわりや<br>
+        小さな楽しみが詰まっているかもしれません。</p>
+        
     </section>
       <!-- 窓（リンク）＋テーブルの演出 -->
   <div class="entrance-area" aria-label="ひとりの部屋の入口">
     <a href="main.html" aria-label="ひとり時間のシェア空間へ">
-      <img src="window.png" alt="窓（クリックで入室）" class="window-icon">
+      <img src="gacha.png" alt="窓（クリックで入室）" class="gacha-icon">
     </a>
-    <img src="on_the_table.png" alt="テーブルとコーヒー" class="table-img">
   </div>
     
   </main>
 
 </body>
 </html>
+
 
 
 
