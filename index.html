@@ -26,13 +26,13 @@ html,body{
   text-align: center;
   padding: 12vh 4vmin 8vmin;
 }
-    
+
 /* 🍗 KFC画像 */
 .kfc-image {
-  width: min(45vw, 280px);
+  width: min(45vw, 260px);
   height: auto;
   display: block;
-  margin: 8px auto 64px; /* ← 1枚目の下に近く、2枚目まで余裕を持たせる */
+  margin: 8px auto 72px;
   opacity: 0.95;
   transition: transform 0.3s ease, opacity 0.3s ease;
   user-select: none;
@@ -42,122 +42,166 @@ html,body{
   transform: scale(1.05);
   opacity: 1;
 }
-    
+
 /* カード */
 .card {
-  max-width: 880px;
-  width: min(92vw, 880px);
+  max-width: 640px;
+  width: min(84vw, 640px);
   background: rgba(255,255,255,.45);
   border-radius: 20px;
-  padding: clamp(20px,4vmin,40px);
-  margin-bottom: 56px; /* カード同士の間隔を統一 */
+  padding: clamp(20px,4vmin,36px);
+  margin-bottom: 64px;
 }
-h1{font-size:clamp(22px,3.5vmin,32px); margin:0 0 8px;}
-p{line-height:1.8; margin:.5em 0;}
-.content .card{color:rgb(51 51 51);}
-.content .card a{color:#2f3a44;}
-.content .card p{margin:0 0 .5em;}
-.content .card p + p{margin-top:1.8em;}
 
-/* 入口ブロック：カードの下に通常配置 */
-.entrance-area{
-  position: static;           /* ← fixed をやめる */
-  margin-top: 28px;           /* カードとの間隔（好みで調整） */
+/* --- 各カードごとの間隔指定 --- */
+.card:first-of-type {
+  margin-bottom: 8px;
+}
+.kfc-image {
+  margin-top: 8px;
+  margin-bottom: 72px;
+}
+.card:nth-of-type(2) {
+  margin-bottom: 72px;
+}
+
+/* テキスト関連 */
+h1 {font-size: clamp(22px,3.5vmin,32px); margin:0 0 8px;}
+p {line-height:1.8; margin:.5em 0;}
+.content .card {color:rgb(51 51 51);}
+.content .card a {color:#2f3a44;}
+.content .card p {margin:0 0 .5em;}
+.content .card p + p {margin-top:1.8em;}
+
+/* 入口ブロック */
+.entrance-area {
+  position: static;
+  margin-top: 48px;
   width: 100%;
   display: flex;
-  flex-direction: column;     /* 窓 → テーブル の縦並び */
-  align-items: center;        /* 中央寄せ */
-  pointer-events: none;       /* 中のリンクだけクリック可にするため */
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+.entrance-area a { pointer-events: auto; }
+
+/* 窓アイコン */
+.solitude_space-icon {
+  width: min(35vw, 240px);
+  height: auto;
+  margin-bottom: 10px;
+  opacity: .95;
+  cursor: pointer;
+  transition: transform .25s ease, opacity .25s ease;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.solitude_space-icon:hover {
+  transform: translateY(-10px) scale(1.04);
+  opacity: 1;
 }
 
-/* クリックできるのは窓のみ */
-.entrance-area a{ pointer-events: auto; }
-
-/* 窓（リンクアイコン） */
-.solitude_space-icon{
-  width:min(35vw, 240px);  /* 画面に応じて縮尺 */
-  height:auto;
-  margin-bottom:10px;      /* テーブルとの間隔 */
-  opacity:.95;
-  cursor:pointer;
-  transition:transform .25s ease, opacity .25s ease;
-  user-select:none; -webkit-user-drag:none;
+/* フェードイン演出 */
+.fade-in {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: fadeInUp 1.2s ease-out forwards;
 }
-/* ほんの少し上に持ち上げる（“少し上に” の演出） */
-.solitude_space-icon:hover{ transform:translateY(-10px) scale(1.04); opacity:1; }
+.fade-in:nth-of-type(1) { animation-delay: 0.3s; }
+.fade-in:nth-of-type(2) { animation-delay: 0.6s; }
+.fade-in:nth-of-type(3) { animation-delay: 0.9s; }
+.fade-in:nth-of-type(4) { animation-delay: 1.2s; }
+.fade-in:nth-of-type(5) { animation-delay: 1.5s; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 /* 動きを減らす設定 */
-@media (prefers-reduced-motion: reduce){
-  .solitude_space-icon{ transition:none; transform:none; }
+@media (prefers-reduced-motion: reduce) {
+  .solitude_space-icon,
+  .fade-in { transition: none; transform: none; animation: none; opacity: 1; }
+}
+
+/* スマホ／タブレット最適化 */
+@media (max-width: 768px) {
+  .card {
+    width: 92vw;
+    max-width: 92vw;
+    padding: 20px 16px;
+    margin-bottom: 56px;
+  }
+  .kfc-image {
+    width: 60vw;
+    margin: 8px auto 64px;
+  }
+  .solitude_space-icon {
+    width: 48vw;
+  }
+}
+@media (min-width: 769px) and (max-width: 1200px) {
+  .card {
+    max-width: 560px;
+  }
 }
   </style>
 </head>
 
 <body>
   <!-- 背景 -->
-  <canvas
-    id="rainCanvas" class="rain-layer" aria-hidden="true"
+  <canvas id="rainCanvas" class="rain-layer" aria-hidden="true"
     data-density="0.8" data-speed="1.0" data-line-ratio="0.55"
     data-max-drops="240" data-dot-size="1.2" data-line-length="16"
     data-line-thickness="1" data-ripple="true"></canvas>
 
-<main class="content">
+  <main class="content">
+    <section class="card fade-in">
+      <p>有給休暇を取ったある日、<br>
+      わたしは車を走らせていた。<br>
+      雨が降るなか立ち寄った<br>
+      ケンタッキーフライドチキンで、<br>
+      チキンとポテトを買い、<br>
+      車に戻ってラジオをかけて食べた。</p>
+    </section>
 
-  <!-- 1枚目のカード -->
-  <section class="card">
-    <p>有給休暇を取ったある日、<br>
-    わたしは車を走らせていた。<br>
-    雨が降るなか立ち寄った<br>
-    ケンタッキーフライドチキンで、<br>
-    チキンとポテトを買い、<br>
-    車に戻ってラジオをかけて食べた。</p>
-  </section>
+    <img src="KFC.png" alt="KFCのイメージ" class="kfc-image fade-in">
 
-  <!-- 🍗 KFC画像（カード直下に）-->
-  <img src="KFC.png" alt="KFCのイメージ" class="kfc-image">
+    <section class="card fade-in">
+      <p>誰にも気を遣わず、<br>
+      何の義務もなく、<br>
+      ただ雨とラジオの音と<br>
+      チキンの香りに包まれた時間。<br>
+      誰かと話したわけでも、<br>
+      特別なイベントがあったわけでもない。<br>
+      それでもわたしは<br>
+      驚くほど満たされた気持ちになった。</p>
+    </section>
 
-  <!-- 2枚目のカード -->
-  <section class="card">
-    <p>誰にも気を遣わず、<br>
-    何の義務もなく、<br>
-    ただ雨とラジオの音と<br>
-    チキンの香りに包まれた時間。<br>
-    誰かと話したわけでも、<br>
-    特別なイベントがあったわけでもない。<br>
-    それでもわたしは<br>
-    驚くほど満たされた気持ちになった。</p>
-  </section>
+    <section class="card fade-in">
+      <p>特に人に話すほどのことではないのだけど、<br>
+      大切にしている自分だけのひととき。</p>
+      <p>そんな "ひとり時間" を誰しも<br>
+      ひとつは持っているのではないでしょうか？<br>
+      そこには、一人ひとりのこだわりや<br>
+      小さな楽しみが詰まっているかもしれません。</p>
+      <p>どこかの誰かのひとり時間。<br>
+      ちょっとのぞいてみませんか？</p>
+    </section>
 
-  <!-- 3枚目のカード -->
-  <section class="card">
-    <p>特に人に話すほどのことではないのだけど、<br>
-    大切にしている自分だけのひととき。</p>
+    <div class="entrance-area fade-in" aria-label="ひとりの部屋の入口">
+      <a href="main.html" aria-label="ひとり時間のシェア空間へ">
+        <img src="solitude_space.png" alt="窓（クリックで入室）" class="solitude_space-icon">
+      </a>
+    </div>
+  </main>
 
-    <p>そんな "ひとり時間" を誰しも<br>
-    ひとつは持っているのではないでしょうか？<br>
-    そこには、一人ひとりのこだわりや<br>
-    小さな楽しみが詰まっているかもしれません。</p>
-
-    <p>どこかの誰かのひとり時間。<br>
-    ちょっとのぞいてみませんか？</p>
-  </section>
-
-  <!-- 窓リンク -->
-  <div class="entrance-area" aria-label="ひとりの部屋の入口">
-    <a href="main.html" aria-label="ひとり時間のシェア空間へ">
-      <img src="solitude_space.png" alt="窓（クリックで入室）" class="solitude_space-icon">
-    </a>
-  </div>
-
-</main>
-
-
+  <!-- 雨アニメーションスクリプト -->
   <script>
   (function(){
     const canvas=document.getElementById('rainCanvas');
     const ctx=canvas.getContext('2d');
     const DPR=Math.max(1,Math.min(window.devicePixelRatio||1,2));
-    const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const cfg={
       density:+(canvas.dataset.density||.75),
@@ -170,8 +214,6 @@ p{line-height:1.8; margin:.5em 0;}
       ripple:(canvas.dataset.ripple||'true')==='true',
     };
 
-    function getCSS(n,f){const v=getComputedStyle(document.documentElement).getPropertyValue(n);const x=parseFloat(v.trim());return Number.isFinite(x)?x:f;}
-
     let W,H,drops=[],ripples=[];
     function resize(){
       W=canvas.width=Math.floor(innerWidth*DPR);
@@ -182,7 +224,6 @@ p{line-height:1.8; margin:.5em 0;}
       const target=Math.min(cfg.maxDrops,Math.floor(140*cfg.density*Math.max(1,base)));
       resetPool(target);
     }
-
     function newDrop(){
       const isLine=Math.random()<cfg.lineRatio;
       const base=isLine?230:170;
@@ -195,48 +236,25 @@ p{line-height:1.8; margin:.5em 0;}
               vy, ay, len, thick:cfg.lineThickness*(0.7+Math.random()*0.6),
               type:isLine?'line':'dot', alpha:0.45+Math.random()*0.25 };
     }
-
-    function resetPool(t){
-      const c=drops.length;
-      if(c<t){ for(let i=c;i<t;i++) drops.push(newDrop()); }
-      else if(c>t){ drops.length=t; }
-    }
-
-    function addRipple(x,y){
-      if(!cfg.ripple) return;
-      ripples.push({x,y,r:0,alpha:.18});
-      if(ripples.length>32) ripples.shift();
-    }
-
+    function resetPool(t){const c=drops.length; if(c<t){for(let i=c;i<t;i++)drops.push(newDrop());}else if(c>t){drops.length=t;}}
+    function addRipple(x,y){if(!cfg.ripple)return; ripples.push({x,y,r:0,alpha:.18}); if(ripples.length>32)ripples.shift();}
     function step(){
-    const opacity=getCSS('--opacity',.18);
-    ctx.clearRect(0,0,W,H);
-    ctx.fillStyle = `rgba(244,246,248,${opacity})`; // 単色の薄い背景
-    ctx.fillRect(0,0,W,H);
-
+      ctx.clearRect(0,0,W,H);
+      ctx.fillStyle=`rgba(244,246,248,${getComputedStyle(document.documentElement).getPropertyValue('--opacity')||.18})`;
+      ctx.fillRect(0,0,W,H);
       const dropColor=getComputedStyle(document.documentElement).getPropertyValue('--drop').trim()||'#5d6b7a';
       ctx.strokeStyle=dropColor; ctx.fillStyle=dropColor;
-
       for(let i=0;i<drops.length;i++){
-        const d=drops[i];
-        d.vy+=d.ay||0; d.y+=d.vy*DPR;
+        const d=drops[i]; d.vy+=d.ay||0; d.y+=d.vy*DPR;
         ctx.globalAlpha=d.alpha;
-        if(d.type==='line'){
-          ctx.lineWidth=d.thick; ctx.beginPath();
-          ctx.moveTo(d.x,d.y-d.len); ctx.lineTo(d.x,d.y); ctx.stroke();
-        }else{
-          ctx.beginPath(); ctx.arc(d.x,d.y,cfg.dotSize,0,Math.PI*2); ctx.fill();
-        }
-        if(d.y-(d.len||0)>H){
-          if(cfg.ripple) addRipple(d.x,H-4*DPR);
-          drops[i]=newDrop(); drops[i].x=Math.random()*W;
-        }
+        if(d.type==='line'){ctx.lineWidth=d.thick; ctx.beginPath(); ctx.moveTo(d.x,d.y-d.len); ctx.lineTo(d.x,d.y); ctx.stroke();}
+        else{ctx.beginPath(); ctx.arc(d.x,d.y,cfg.dotSize,0,Math.PI*2); ctx.fill();}
+        if(d.y-(d.len||0)>H){if(cfg.ripple)addRipple(d.x,H-4*DPR); drops[i]=newDrop(); drops[i].x=Math.random()*W;}
       }
-
       if(cfg.ripple&&ripples.length){
         for(let i=ripples.length-1;i>=0;i--){
           const r=ripples[i]; r.r+=0.8*DPR; r.alpha*=0.985;
-          if(r.alpha<0.008){ ripples.splice(i,1); continue; }
+          if(r.alpha<0.008){ripples.splice(i,1); continue;}
           ctx.beginPath(); ctx.globalAlpha=r.alpha;
           ctx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--ripple').trim()||'#5d6b7a22';
           ctx.lineWidth=1*DPR; ctx.arc(r.x,r.y,r.r,0,Math.PI); ctx.stroke();
@@ -244,26 +262,9 @@ p{line-height:1.8; margin:.5em 0;}
       }
       ctx.globalAlpha=1;
     }
-
-    let rafId=null;
-    function loop(){ step(); rafId=requestAnimationFrame(loop); }
-
-    document.addEventListener('visibilitychange',()=>{
-      if(document.hidden){ if(rafId) cancelAnimationFrame(rafId); rafId=null; }
-      else{ rafId=requestAnimationFrame(loop); }
-    });
-
     resize(); addEventListener('resize',resize,{passive:true});
-    rafId=requestAnimationFrame(loop);
+    (function loop(){step(); requestAnimationFrame(loop);})();
   })();
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
