@@ -13,25 +13,24 @@ html,body{
   display:flex;
   justify-content:center;
   align-items:center;
-  /* 🎨 固定背景 back.png */
   background: url("back.png") center/cover no-repeat fixed;
   position: relative;
   overflow: hidden;
 }
 
-/* 🌙 背景オーバーレイ（やや暗くして没入感） */
+/* 🌙 背景オーバーレイ */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.25); /* ← 透明度を上げ下げで調整（0.25〜0.4推奨） */
+  background: rgba(0, 0, 0, 0.25);
   z-index: 0;
 }
 
 /* カード */
 #randomSolo {
   position: relative;
-  z-index: 1; /* 背景オーバーレイより上に表示 */
+  z-index: 1;
   background: rgba(255,255,255,0.65);
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.1);
@@ -40,14 +39,14 @@ body::before {
   width: min(90vw, 600px);
   text-align: center;
   transition: box-shadow .3s ease, transform .3s ease;
-  backdrop-filter: blur(6px); /* 透明背景の下をぼかす */
+  backdrop-filter: blur(6px);
 }
 #randomSolo:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 28px rgba(0,0,0,0.15);
 }
 
-/* 見出し・テキスト */
+/* テキスト */
 .label {
   font-size: .9rem;
   color: #f0f0f0;
@@ -67,7 +66,7 @@ body::before {
   white-space: pre-wrap;
 }
 
-/* 🎰 更新ボタン（gacha.pngに変更） */
+/* 🎰 更新ボタン */
 #refreshButton {
   background: none;
   border: none;
@@ -85,6 +84,47 @@ body::before {
   transform: scale(1.06);
   opacity: 1;
 }
+
+/* 🔗 シェアリンク（main.html準拠） */
+.link-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10vw;
+  margin-top: 40px;
+  width: 100%;
+  position: relative;
+  flex-wrap: wrap;
+  z-index: 1;
+}
+
+.link-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.link-icon {
+  width: 120px;
+  height: auto;
+  opacity: 0.9;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  cursor: pointer;
+  -webkit-user-drag: none;
+}
+.link-icon:hover {
+  transform: translateY(-3px) scale(1.05);
+  opacity: 1.0;
+}
+.link-label {
+  margin-top: 0.4rem;
+  font-size: 1rem;
+  color: #f3f3f3;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  user-select: none;
+}
   </style>
 </head>
 <body>
@@ -97,6 +137,18 @@ body::before {
     <button id="refreshButton">
       <img src="gacha.png" alt="更新">
     </button>
+  </div>
+
+  <!-- 🔗 シェアするボタン -->
+  <div class="link-icons">
+    <div class="link-item">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7G7paHmRJT79fj1Ayl0gf3hZrUFJ4Wi6mJEDpo5l9hvN-lQ/viewform?usp=dialog"
+         target="_blank" rel="noopener noreferrer"
+         aria-label="ひとり時間を投稿する">
+        <img src="Share.png" alt="ひとり時間を投稿する" class="link-icon">
+      </a>
+      <p class="link-label">シェアする</p>
+    </div>
   </div>
 
   <!-- SheetJS (XLSX) CDN -->
@@ -120,7 +172,6 @@ body::before {
       const title = pick['タイトル'] || pick['title'] || '';
       const one   = pick['ひとこと'] || pick['一言'] || pick['comment'] || '';
 
-      // 句点または空白（半角・全角・改行）で改行
       const formattedOne = one
         .replace(/。/g, '。<br>')
         .replace(/[\s　]+/g, '<br>')
@@ -135,10 +186,7 @@ body::before {
     }
   }
 
-  // 初期表示
   loadRandomSolo();
-
-  // 更新ボタンのクリックで再読み込み
   document.getElementById('refreshButton').addEventListener('click', loadRandomSolo);
   </script>
 </body>
