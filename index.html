@@ -18,26 +18,39 @@ html,body{
 /* 背景キャンバス */
 .rain-layer{position:fixed; inset:0; z-index:0; filter:blur(var(--blur));}
 
-/* 前景テキスト */
-.content{
-  position:relative;
-  min-height:100%;
-  display:flex;
-  /* ここを追加/変更 */
-  flex-direction: column;   /* ← 子要素を縦並びにする */
-  align-items: center;      /* ← 中央寄せ */
-  justify-content: flex-start;
-  padding:12vh 4vmin 8vmin;
-  text-align:center;
-  z-index:1;
-  gap: 24px;                /* ← カードと入口の間隔（任意） */
+/* コンテンツ全体（カードや画像の縦並び） */
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 12vh 4vmin 8vmin;
 }
-
-.card{
-  max-width:880px; width:min(92vw,880px);
-  background:rgba(255,255,255,.45);
-  border:1px solid transparent; border-radius:20px;
-  padding:clamp(20px,4vmin,40px);
+    
+/* 🍗 KFC画像 */
+.kfc-image {
+  width: min(45vw, 280px);
+  height: auto;
+  display: block;
+  margin: 8px auto 64px; /* ← 1枚目の下に近く、2枚目まで余裕を持たせる */
+  opacity: 0.95;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.kfc-image:hover {
+  transform: scale(1.05);
+  opacity: 1;
+}
+    
+/* カード */
+.card {
+  max-width: 880px;
+  width: min(92vw, 880px);
+  background: rgba(255,255,255,.45);
+  border-radius: 20px;
+  padding: clamp(20px,4vmin,40px);
+  margin-bottom: 56px; /* カード同士の間隔を統一 */
 }
 h1{font-size:clamp(22px,3.5vmin,32px); margin:0 0 8px;}
 p{line-height:1.8; margin:.5em 0;}
@@ -88,51 +101,56 @@ p{line-height:1.8; margin:.5em 0;}
     data-max-drops="240" data-dot-size="1.2" data-line-length="16"
     data-line-thickness="1" data-ripple="true"></canvas>
 
-  <!-- 前景テキスト -->
-  <main class="content">
-    <section class="card">
-      <p>有給休暇を取ったある日、<br>
-      わたしは車を走らせていた。<br>
-      雨が降るなか立ち寄った<br>
-      ケンタッキーフライドチキンで、<br>
-      チキンとポテトを買い、<br>
-      車に戻ってラジオをかけて食べた。</p>
+<main class="content">
 
-      <p>誰にも気を遣わず、<br>
-      何の義務もなく、<br>
-      ただ雨とラジオの音と<br>
-      チキンの香りに包まれた時間。<br>
-      誰かと話したわけでも、<br>
-      特別なイベントがあったわけでもない。<br>
-      それでもわたしは<br>
-      驚くほど満たされた気持ちになった。</p>
-    </section>
+  <!-- 1枚目のカード -->
+  <section class="card">
+    <p>有給休暇を取ったある日、<br>
+    わたしは車を走らせていた。<br>
+    雨が降るなか立ち寄った<br>
+    ケンタッキーフライドチキンで、<br>
+    チキンとポテトを買い、<br>
+    車に戻ってラジオをかけて食べた。</p>
+  </section>
 
+  <!-- 🍗 KFC画像（カード直下に）-->
+  <img src="KFC.png" alt="KFCのイメージ" class="kfc-image">
 
-    <section class="card">
-     <p>特に人に話すほどのことではないのだけど、<br>
-        大切にしている自分だけのひととき。</p>
-        
+  <!-- 2枚目のカード -->
+  <section class="card">
+    <p>誰にも気を遣わず、<br>
+    何の義務もなく、<br>
+    ただ雨とラジオの音と<br>
+    チキンの香りに包まれた時間。<br>
+    誰かと話したわけでも、<br>
+    特別なイベントがあったわけでもない。<br>
+    それでもわたしは<br>
+    驚くほど満たされた気持ちになった。</p>
+  </section>
+
+  <!-- 3枚目のカード -->
+  <section class="card">
+    <p>特に人に話すほどのことではないのだけど、<br>
+    大切にしている自分だけのひととき。</p>
+
     <p>そんな "ひとり時間" を誰しも<br>
-       ひとつは持っているのではないでしょうか？<br>
-       そこには、一人ひとりのこだわりや<br>
-       小さな楽しみが詰まっているかもしれません。</p>
-    
-    <p>どこかの誰かのひとり時間<br>
-       ちょっとのぞいてみませんか？</p>
+    ひとつは持っているのではないでしょうか？<br>
+    そこには、一人ひとりのこだわりや<br>
+    小さな楽しみが詰まっているかもしれません。</p>
 
-      
-       
-    </section>
+    <p>どこかの誰かのひとり時間。<br>
+    ちょっとのぞいてみませんか？</p>
+  </section>
 
-      <!-- 窓（リンク）＋テーブルの演出 -->
+  <!-- 窓リンク -->
   <div class="entrance-area" aria-label="ひとりの部屋の入口">
     <a href="main.html" aria-label="ひとり時間のシェア空間へ">
       <img src="solitude_space.png" alt="窓（クリックで入室）" class="solitude_space-icon">
     </a>
   </div>
-    
-  </main>
+
+</main>
+
 
   <script>
   (function(){
@@ -241,6 +259,7 @@ p{line-height:1.8; margin:.5em 0;}
   </script>
 </body>
 </html>
+
 
 
 
